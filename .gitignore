@@ -1,5 +1,8 @@
 ﻿# Customized
 tmp_*
+*.pdf
+paper/
+
 
 # ignore
 .vscode
