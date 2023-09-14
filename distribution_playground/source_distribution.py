@@ -172,8 +172,9 @@ class DistributionByDensityArray:
     def str_divergence(self, divergence):
         if not isinstance(divergence, dict):
             divergence = self.divergence(divergence)
-        return ", ".join(
-            [f"{k}={divergence[k]}" for k in ["kl", "js", "tv", "hellinger"]]
+
+        return "js=%.2f%%, " % (divergence["js"] * 100) + ", ".join(
+            [f"{k}={divergence[k]}" for k in ["kl", "tv", "hellinger"]]
         )
 
     __repr__ = __str__
