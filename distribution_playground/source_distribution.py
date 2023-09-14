@@ -100,6 +100,18 @@ def samples_to_indices(samples, domain, density):
     return indices.T
 
 
+def xys_to_vus(xys, shape, domain):
+    """
+    和 samples_to_indices 验证一致， 并只保留一个
+    """
+    idxs_2d = xys[:, ::-1].copy()  # yxs
+    for idx, (l, r) in enumerate(domain):
+        idxs_2d[:, idx] = (idxs_2d[:, idx] - l) / (r - l) * shape[idx] - 0.5 + eps
+        idxs_2d[:, idx] = idxs_2d[:, idx].clip(0 + eps, shape[idx] - 1 - eps)
+    idxs_2d[:, -2] = shape[idx] - 1 - idxs_2d[:, -2]
+    return idxs_2d
+
+
 def jensen_shannon_divergence(p, q):
     """
     Compute the Jensen-Shannon divergence between two probability distributions.
@@ -107,8 +119,8 @@ def jensen_shannon_divergence(p, q):
     :param q: Second probability distribution
     :return: JS divergence value
     """
-    p = np.asarray(p, dtype=np.float)
-    q = np.asarray(q, dtype=np.float)
+    # p = np.asarray(p, dtype=np.float)
+    # q = np.asarray(q, dtype=np.float)
 
     m = 0.5 * (p + q)
     jsd = 0.5 * (entropy(p, m) + entropy(q, m))
