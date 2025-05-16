@@ -2,47 +2,10 @@
 import boxx
 import numpy as np
 import matplotlib.pyplot as plt
-import cv2
 from scipy.stats import entropy
 
-eps = 1e-20
-
-
-def draw_circles_and_blur(size=100):
-    s = size
-    # 创建一个 s x s 的空白图像
-    img = np.zeros((s, s), dtype=np.uint8)
-
-    # 圆心坐标
-    circles_centers = [
-        (s // 2, s // 2),
-        (s // 4, s // 4),
-        (s * 3 // 4, s // 4),
-        (s // 4, s * 3 // 4),
-        (s * 3 // 4, s * 3 // 4),
-    ]
-
-    # 画 5 个圆
-    radius = s // 10
-    for center in circles_centers:
-        cv2.circle(img, center, radius, color=128, thickness=-1)
-        cv2.circle(img, center, radius // 2, color=0, thickness=-1)
-
-    # 使用高斯模糊核半径为 s//50
-    ksize = (s // 40) * 2 + 1
-    blurred_img1 = cv2.GaussianBlur(img, (ksize, ksize), 0)
-
-    ksize = (s // 10) * 2 + 1
-    blurred_img2 = cv2.GaussianBlur(img, (ksize, ksize), 0)
-
-    ksize = int((s / 2.5) * 2 + 1)
-    blurred_img3 = cv2.GaussianBlur(img, (ksize, ksize), 0)
-    s = s // 2
-    img[:s, s:] = blurred_img1[:s, s:]
-    img[s:, :s] = blurred_img2[s:, :s]
-    img[s:, s:] = blurred_img3[s:, s:]
-    img = img + eps / img.size
-    return img / img.sum()
+with boxx.inpkg():
+    from .density_maps import build_blurs_density_map, eps
 
 
 def sample_probability_density(arr, n=1000, domain=None):
@@ -181,7 +144,7 @@ class DistributionByDensityArray:
 
 
 def get_test_dist(size=100):
-    density = draw_circles_and_blur(size)
+    density = build_blurs_density_map(size)["density"]
     dist = DistributionByDensityArray(
         density,
     )
@@ -192,7 +155,7 @@ if __name__ == "__main__":
     from boxx import *
 
     size = 100
-    density = draw_circles_and_blur(size)
+    density = build_blurs_density_map(size)["density"]
     dist = DistributionByDensityArray(
         density,
     )
