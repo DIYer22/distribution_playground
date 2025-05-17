@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import entropy
 
 with boxx.inpkg():
-    from .density_maps import build_blurs_density_map, eps
+    from .density_maps import build_blur_circles_density_map, eps
 
 
 def sample_probability_density(arr, n=1000, domain=None):
@@ -144,7 +144,7 @@ class DistributionByDensityArray:
 
 
 def get_test_dist(size=100):
-    density = build_blurs_density_map(size)["density"]
+    density = build_blur_circles_density_map(size)["density"]
     dist = DistributionByDensityArray(
         density,
     )
@@ -155,7 +155,7 @@ if __name__ == "__main__":
     from boxx import *
 
     size = 100
-    density = build_blurs_density_map(size)["density"]
+    density = build_blur_circles_density_map(size)["density"]
     dist = DistributionByDensityArray(
         density,
     )

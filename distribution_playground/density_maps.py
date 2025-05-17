@@ -25,7 +25,7 @@ def build_gaussian_density_map(shape=100):
     return dict(density=density, name="gaussian")
 
 
-def build_blurs_density_map(shape=100):
+def build_blur_circles_density_map(shape=100):
     if isinstance(shape, int):
         shape = (shape, shape)
     h, w = shape
@@ -62,7 +62,7 @@ def build_blurs_density_map(shape=100):
     img[s:, s:] = blurred_img3[s:, s:]
     img = img + eps / img.size
     density = img / img.sum()
-    return dict(density=density, name="blurs")
+    return dict(density=density, name="blur_circles")
 
 
 def convert_density_map_img(density_map_img_path, shape=None):
@@ -89,7 +89,7 @@ def convert_density_map_img(density_map_img_path, shape=None):
 density_map_builders = {
     "uniform": build_uniform_density_map,
     "gaussian": build_gaussian_density_map,
-    "blurs": build_blurs_density_map,
+    "blur_circles": build_blur_circles_density_map,
 }
 
 density_map_img_paths = sorted(boxx.glob(boxx.relfile("density_map_imgs/*.png")))

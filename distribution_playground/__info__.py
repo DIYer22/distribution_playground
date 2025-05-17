@@ -1,4 +1,4 @@
-__version__ = "0.1.0"
+__version__ = "0.1.2"
 __description__ = "distribution_playground"
 __license__ = "MIT"
 __author__ = "DIYer22"
